@@ -36,21 +36,14 @@ export function calculateSimilarityScore(
 }
 
 /**
- * Filters accounts based on selected filters using Set operations
- * Filters work as checkboxes for User A and User B
+ * Gets all unique accounts from both users as a Map for fast lookup
  */
-export function getFilteredAccounts(
+export function getAllAccountsMap(
 	userAData: ProcessedUserData | undefined,
 	userBData: ProcessedUserData | undefined,
-	aFilters: string[],
-	bFilters: string[],
-): FollowerInfo[] {
+): Map<string, FollowerInfo> {
 	if (!userAData || !userBData) {
-		return [];
-	}
-
-	if (aFilters.length === 0 && bFilters.length === 0) {
-		return [];
+		return new Map();
 	}
 
 	// Combine all unique accounts from both users
@@ -62,39 +55,41 @@ export function getFilteredAccounts(
 		allAccounts.set(handle, account);
 	}
 
-	// Build filter sets using Set operations
-	// When both filters are selected, use intersection (AND logic)
-	// When only one filter is selected, use that set directly
-	let aFilterSet = new Set<string>();
-	if (aFilters.includes("following") && aFilters.includes("followed-by")) {
-		aFilterSet = userAData.followsSet.intersection(userAData.followersSet);
-	} else if (aFilters.includes("following")) {
-		aFilterSet = userAData.followsSet;
-	} else if (aFilters.includes("followed-by")) {
-		aFilterSet = userAData.followersSet;
+	// Filter out invalid handles
+	allAccounts.delete("handle.invalid");
+	return allAccounts;
+}
+
+/**
+ * Gets all unique accounts from both users as an array
+ */
+export function getAllAccounts(
+	userAData: ProcessedUserData | undefined,
+	userBData: ProcessedUserData | undefined,
+): FollowerInfo[] {
+	return Array.from(getAllAccountsMap(userAData, userBData).values());
+}
+
+/**
+ * Filters accounts based on selected sets using Set operations
+ * Takes an array of sets to intersect and returns matching accounts
+ */
+export function getFilteredAccounts(
+	selectedSets: Set<string>[],
+	allAccountsMap: Map<string, FollowerInfo>,
+): FollowerInfo[] {
+	if (selectedSets.length === 0) {
+		return [];
 	}
 
-	let bFilterSet = new Set<string>();
-	if (bFilters.includes("following") && bFilters.includes("followed-by")) {
-		bFilterSet = userBData.followsSet.intersection(userBData.followersSet);
-	} else if (bFilters.includes("following")) {
-		bFilterSet = userBData.followsSet;
-	} else if (bFilters.includes("followed-by")) {
-		bFilterSet = userBData.followersSet;
+	// Calculate intersection of all selected sets
+	let resultSet = selectedSets[0];
+	for (let i = 1; i < selectedSets.length; i++) {
+		resultSet = resultSet.intersection(selectedSets[i]);
 	}
 
-	// Intersect the two filter sets (AND logic between filter groups)
-	let resultSet: Set<string>;
-	if (aFilters.length > 0 && bFilters.length > 0) {
-		resultSet = aFilterSet.intersection(bFilterSet);
-	} else if (aFilters.length > 0) {
-		resultSet = aFilterSet;
-	} else {
-		resultSet = bFilterSet;
-	}
-
-	// filter out any invalid handles
-	resultSet.delete("handle.invalid");
-	// Map handles back to account info
-	return Array.from(resultSet).map((handle) => allAccounts.get(handle)!);
+	// Map handles to account objects using O(1) Map lookup
+	return Array.from(resultSet)
+		.map((handle) => allAccountsMap.get(handle))
+		.filter((acc): acc is FollowerInfo => acc !== undefined);
 }

@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { AtpAgent } from "@atproto/api";
 import { HTTPError } from "ky";
 import ky from "ky";
@@ -13,50 +13,60 @@ const agent = new AtpAgent({ service: "https://public.api.bsky.app" });
 const BACKEND_URL =
 	"https://tylersayshi--7a77153cbaba11f08a7c0224a6c84d84.web.val.run/";
 
+const getBlueskyFollows = (handle: string | null) => async () => {
+	if (!handle) throw new Error("No handle provided");
+
+	try {
+		const result = await ky
+			.get(BACKEND_URL, {
+				searchParams: { actor: handle },
+				timeout: 60000 * 5, // 5 mins
+			})
+			.json<BackendResponse>();
+
+		// Pre-compute Sets and Maps for performance
+		const followsSet = new Set(result.follows.map((f) => f.handle));
+		const followersSet = new Set(result.followers.map((f) => f.handle));
+
+		// Combine all unique accounts
+		const allAccounts = new Map<string, FollowerInfo>();
+		for (const account of result.follows) {
+			allAccounts.set(account.handle, account);
+		}
+		for (const account of result.followers) {
+			allAccounts.set(account.handle, account);
+		}
+
+		return {
+			...result,
+			followsSet,
+			followersSet,
+			allAccounts,
+		};
+	} catch (error) {
+		if (error instanceof HTTPError) {
+			const errorData = await error.response.json<BackendErrorResponse>();
+			throw new Error(
+				errorData.error || errorData.message || "Failed to fetch data",
+			);
+		}
+		throw error;
+	}
+};
+
 export function useBlueskyFollows(handle: string | null) {
 	return useQuery({
 		queryKey: ["bsky-follows", handle],
-		queryFn: async () => {
-			if (!handle) throw new Error("No handle provided");
-
-			try {
-				const result = await ky
-					.get(BACKEND_URL, {
-						searchParams: { actor: handle },
-						timeout: 60000 * 5, // 5 mins
-					})
-					.json<BackendResponse>();
-
-				// Pre-compute Sets and Maps for performance
-				const followsSet = new Set(result.follows.map((f) => f.handle));
-				const followersSet = new Set(result.followers.map((f) => f.handle));
-
-				// Combine all unique accounts
-				const allAccounts = new Map<string, FollowerInfo>();
-				for (const account of result.follows) {
-					allAccounts.set(account.handle, account);
-				}
-				for (const account of result.followers) {
-					allAccounts.set(account.handle, account);
-				}
-
-				return {
-					...result,
-					followsSet,
-					followersSet,
-					allAccounts,
-				};
-			} catch (error) {
-				if (error instanceof HTTPError) {
-					const errorData = await error.response.json<BackendErrorResponse>();
-					throw new Error(
-						errorData.error || errorData.message || "Failed to fetch data",
-					);
-				}
-				throw error;
-			}
-		},
+		queryFn: getBlueskyFollows(handle),
 		enabled: !!handle,
+		retry: false,
+	});
+}
+
+export function useSuspendedBlueskyFollows(handle: string | null) {
+	return useSuspenseQuery({
+		queryKey: ["bsky-follows", handle],
+		queryFn: getBlueskyFollows(handle),
 		retry: false,
 	});
 }

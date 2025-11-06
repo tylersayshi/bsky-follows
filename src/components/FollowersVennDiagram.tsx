@@ -33,10 +33,10 @@ export function FollowersVennDiagram({
 	};
 
 	// Use stable keys that won't change when display names load
-	const user1FollowersKey = 'user1-followers';
-	const user2FollowersKey = 'user2-followers';
-	const user1FollowingKey = 'user1-following';
-	const user2FollowingKey = 'user2-following';
+	const user1FollowersKey = "user1-followers";
+	const user2FollowersKey = "user2-followers";
+	const user1FollowingKey = "user1-following";
+	const user2FollowingKey = "user2-following";
 
 	// Create unique labels for each set with display names for the Venn diagram
 	const user1FollowersLabel = `${user1?.displayName || state.a}'s followers`;
@@ -184,11 +184,16 @@ export function FollowersVennDiagram({
 
 	return (
 		<div className="flex flex-col items-center md:absolute top-0 right-0">
-				<div className={"mb-2 absolute top-0 right-0 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800" + (!displayData ? " bg-white/0! border-white/0" : "")}>
-					<p className="text-sm font-medium text-gray-900 dark:text-gray-100 min-h-5 whitespace-nowrap">
-						{displayData}
-					</p>
-				</div>
+			<div
+				className={
+					"mb-2 absolute top-0 right-0 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800" +
+					(!displayData ? " bg-white/0! border-white/0" : "")
+				}
+			>
+				<p className="text-sm font-medium text-gray-900 dark:text-gray-100 min-h-5 whitespace-nowrap">
+					{displayData}
+				</p>
+			</div>
 			<div className="bg-white mt-4 dark:bg-gray-800 rounded-lg p-4 shadow-sm border border-gray-200 dark:border-gray-700">
 				<VennDiagram
 					height={300}
@@ -218,7 +223,9 @@ export function FollowersVennDiagram({
 									onMouseLeave={() => setHoveredData(null)}
 									onClick={({ value }) => {
 										// Convert labels to stable keys for URL storage
-										const keys = value.sets.map((label: string) => labelToKeyMap.get(label) || label);
+										const keys = value.sets.map(
+											(label: string) => labelToKeyMap.get(label) || label,
+										);
 										setState({ selectedSets: keys });
 									}}
 								/>
@@ -238,7 +245,6 @@ export function FollowersVennDiagram({
 					}
 				/>
 			</div>
-			
 		</div>
 	);
 }

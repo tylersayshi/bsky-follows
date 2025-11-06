@@ -121,11 +121,11 @@ function App() {
 				</div>
 
 				{/* Results */}
-				<Suspense fallback={null}>
-					<UnifiedResultsView
-						allAccountsMap={allAccountsMap}
-					/>
-				</Suspense>
+				{!!state.a && !!state.b && (
+					<Suspense fallback={null}>
+						<UnifiedResultsView allAccountsMap={allAccountsMap} />
+					</Suspense>
+				)}
 
 				{/* Footer */}
 			</div>

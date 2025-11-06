@@ -31,6 +31,7 @@ export function AccountsList({ accounts }: AccountsListProps) {
 						<img
 							src={account.avatar}
 							alt={`avatar of ${account.handle}`}
+							loading="lazy"
 							className="w-10 h-10 rounded-full border-2 border-transparent group-hover:border-cyan-400 group-focus:border-cyan-400 transition-colors"
 						/>
 					)}

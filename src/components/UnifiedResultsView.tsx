@@ -14,22 +14,18 @@ export function UnifiedResultsView({
 	allAccountsMap,
 }: UnifiedResultsViewProps) {
 	const [state] = useFilters();
-	const {
-		data: userAData,
-	} = useSuspendedBlueskyFollows(state.a);
-	const {
-		data: userBData,
-	} = useSuspendedBlueskyFollows(state.b);
+	const { data: userAData } = useSuspendedBlueskyFollows(state.a);
+	const { data: userBData } = useSuspendedBlueskyFollows(state.b);
 
 	// Defer the selected sets so UI updates immediately but filtering happens in background
 	const deferredSelectedSets = useDeferredValue(state.selectedSets);
 
 	// Map stable keys to actual Set objects
 	const keyToSetMap = new Map<string, Set<string>>([
-		['user1-followers', userAData.followersSet],
-		['user2-followers', userBData.followersSet],
-		['user1-following', userAData.followsSet],
-		['user2-following', userBData.followsSet],
+		["user1-followers", userAData.followersSet],
+		["user2-followers", userBData.followersSet],
+		["user1-following", userAData.followsSet],
+		["user2-following", userBData.followsSet],
 	]);
 
 	// Filter accounts based on selected sets using optimized Set intersection
@@ -37,12 +33,14 @@ export function UnifiedResultsView({
 		if (deferredSelectedSets.length === 0) return [];
 
 		// Get all the sets that were selected using stable keys
-		const selectedSets = deferredSelectedSets
-			.reduce<Set<string>[]>((acc, key) => {
-				const set = keyToSetMap.get(key)
+		const selectedSets = deferredSelectedSets.reduce<Set<string>[]>(
+			(acc, key) => {
+				const set = keyToSetMap.get(key);
 				if (set) acc.push(set);
 				return acc;
-			}, [])
+			},
+			[],
+		);
 
 		return getFilteredAccounts(selectedSets, allAccountsMap);
 	})();

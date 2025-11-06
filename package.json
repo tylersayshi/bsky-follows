@@ -20,6 +20,7 @@
 		"nuqs": "^2.7.2",
 		"react": "^19.1.1",
 		"react-dom": "^19.1.1",
+		"reaviz": "^16.1.0",
 		"tailwindcss": "^4.1.16"
 	},
 	"devDependencies": {

@@ -1,8 +1,6 @@
 import { useDeferredValue } from "react";
 import { parseAsArrayOf, parseAsString, useQueryStates } from "nuqs";
 import { UserAutocomplete } from "./components/UserAutocomplete";
-import { AccountsList } from "./components/AccountsList";
-import { SimilarityScore } from "./components/SimilarityScore";
 import {TylurLink} from "./components/TylurLink";
 import { useBlueskyFollows } from "./hooks/useBlueskyData";
 import {
@@ -10,6 +8,7 @@ import {
 	calculateSimilarityScore,
 } from "./utils/comparison";
 import { ErrorMessage } from "./components/ErrorMessage";
+import { ResultsTabs } from "./components/ResultsTabs";
 
 const userAOptions = [
 	{ value: "following", label: "Following" },
@@ -52,20 +51,15 @@ function App() {
 	return (
 		<div className="min-h-screen py-6 px-4 bg-white dark:bg-black flex flex-col justify-between">
 			<div className="container mx-auto max-w-5xl">
-				<div className="flex items-center justify-between mb-2">
-					<h1
-						className="text-3xl font-bold bg-cyan-400 bg-clip-text text-transparent"
-						style={{
-							fontFamily:
-								"Chalkboard,ChalkboardSE-Regular,ChalkboardSE,ChalkDuster,Comic Sans MS,comic-sans,sans-serif",
-						}}
-					>
-						Bluesky Follows
-					</h1>
-					{userAData && userBData && (
-						<SimilarityScore score={similarityScore} />
-					)}
-				</div>
+				<h1
+					className="text-3xl font-bold bg-cyan-400 bg-clip-text text-transparent mb-2"
+					style={{
+						fontFamily:
+							"Chalkboard,ChalkboardSE-Regular,ChalkboardSE,ChalkDuster,Comic Sans MS,comic-sans,sans-serif",
+					}}
+				>
+					Bluesky Follows
+				</h1>
 				<p className="mb-2 text-sm" style={{ color: "var(--text-secondary)" }}>
 					A tool for viewing the follower relationships of bluesky users.
 				</p>
@@ -114,6 +108,7 @@ function App() {
 											<button
 												key={option.value}
 												type="button"
+                        title="used for list view"
 												tabIndex={3 + index}
 												onClick={() => {
 													if (isSelected) {
@@ -185,6 +180,7 @@ function App() {
 											<button
 												key={option.value}
 												type="button"
+                        title="used for list view"
 												tabIndex={5 + index}
 												onClick={() => {
 													if (isSelected) {
@@ -223,14 +219,18 @@ function App() {
 							transition: "opacity 0.2s",
 						}}
 					>
-						<h2
-							className="text-lg font-semibold mb-2"
-							style={{ color: "var(--text-primary)" }}
-						>
-							Results{" "}
-							<span className="text-cyan-600">({filteredAccounts.length})</span>
-						</h2>
-						<AccountsList accounts={filteredAccounts} />
+						<ResultsTabs
+							user1Followers={userAData.followersSet}
+							user2Followers={userBData.followersSet}
+							user1Following={userAData.followsSet}
+							user2Following={userBData.followsSet}
+							filteredAccounts={filteredAccounts}
+							mutualCount={userAData.followsSet.union(userAData.followersSet).intersection(userBData.followsSet.union(userBData.followersSet)).size}
+							user1OnlyCount={userAData.followsSet.union(userAData.followersSet).difference(userBData.followsSet.union(userBData.followersSet)).size}
+							user2OnlyCount={userBData.followsSet.union(userBData.followersSet).difference(userAData.followsSet.union(userAData.followersSet)).size}
+							totalUnique={userAData.followsSet.union(userAData.followersSet).union(userBData.followsSet.union(userBData.followersSet)).size}
+							similarityScore={similarityScore}
+						/>
 					</div>
 				)}
 

@@ -2,7 +2,11 @@ import { useQuery } from "@tanstack/react-query";
 import { AtpAgent } from "@atproto/api";
 import { HTTPError } from "ky";
 import ky from "ky";
-import type { BackendResponse, BackendErrorResponse, FollowerInfo } from "../types";
+import type {
+	BackendResponse,
+	BackendErrorResponse,
+	FollowerInfo,
+} from "../types";
 
 const agent = new AtpAgent({ service: "https://public.api.bsky.app" });
 
@@ -19,6 +23,7 @@ export function useBlueskyFollows(handle: string | null) {
 				const result = await ky
 					.get(BACKEND_URL, {
 						searchParams: { actor: handle },
+						timeout: 60000 * 5, // 5 mins
 					})
 					.json<BackendResponse>();
 
@@ -44,7 +49,9 @@ export function useBlueskyFollows(handle: string | null) {
 			} catch (error) {
 				if (error instanceof HTTPError) {
 					const errorData = await error.response.json<BackendErrorResponse>();
-					throw new Error(errorData.error || errorData.message || "Failed to fetch data");
+					throw new Error(
+						errorData.error || errorData.message || "Failed to fetch data",
+					);
 				}
 				throw error;
 			}
@@ -69,5 +76,28 @@ export function useSearchActors(query: string) {
 		},
 		enabled: query.length >= 2,
 		staleTime: 1000 * 60, // 1 minute
+	});
+}
+
+export function useBlueskyProfile(handle: string | null) {
+	return useQuery({
+		queryKey: ["bsky-profile", handle],
+		queryFn: async () => {
+			if (!handle) throw new Error("No handle provided");
+
+			const response = await agent.app.bsky.actor.getProfile({
+				actor: handle,
+			});
+
+			return {
+				handle: response.data.handle,
+				displayName: response.data.displayName || response.data.handle,
+				avatar: response.data.avatar,
+				description: response.data.description,
+			};
+		},
+		enabled: !!handle,
+		staleTime: 1000 * 60 * 5, // 5 minutes
+		retry: false,
 	});
 }

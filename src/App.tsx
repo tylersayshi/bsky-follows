@@ -86,16 +86,16 @@ function App() {
               <div className="mt-3 flex items-center gap-4 text-sm">
                 <div className="flex gap-4">
                   <span style={{ color: "var(--text-secondary)" }}>
-                    <span className="font-semibold text-cyan-600">
-                      {userAData.follows.length}
-                    </span>{" "}
-                    follows
-                  </span>
-                  <span style={{ color: "var(--text-secondary)" }}>
                     <span className="font-semibold text-blue-600">
                       {userAData.followers.length}
                     </span>{" "}
                     followers
+                  </span>
+                  <span style={{ color: "var(--text-secondary)" }}>
+                    <span className="font-semibold text-cyan-600">
+                      {userAData.follows.length}
+                    </span>{" "}
+                    follows
                   </span>
                 </div>
                 <div className="ml-auto flex gap-2">
@@ -156,16 +156,16 @@ function App() {
               <div className="mt-3 flex items-center gap-4 text-sm">
                 <div className="flex gap-4">
                   <span style={{ color: "var(--text-secondary)" }}>
-                    <span className="font-semibold text-cyan-600">
-                      {userBData.follows.length}
-                    </span>{" "}
-                    follows
-                  </span>
-                  <span style={{ color: "var(--text-secondary)" }}>
                     <span className="font-semibold text-blue-600">
                       {userBData.followers.length}
                     </span>{" "}
                     followers
+                  </span>
+                  <span style={{ color: "var(--text-secondary)" }}>
+                    <span className="font-semibold text-cyan-600">
+                      {userBData.follows.length}
+                    </span>{" "}
+                    follows
                   </span>
                 </div>
                 <div className="ml-auto flex gap-2">
@@ -226,6 +226,7 @@ function App() {
                 </h2>
                 <AccountsList accounts={filteredAccounts} />
               </div>
+              {/* TODO this look bad on mobile */}
               {userAData && userBData && (
                 <SimilarityScore score={similarityScore} />
               )}

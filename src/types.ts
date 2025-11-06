@@ -10,12 +10,13 @@ export interface BackendResponse {
   follows: FollowerInfo[];
   fromCache: boolean;
   cached: boolean;
+  willCache: boolean;
   cacheHits?: number;
 }
 
 // Filter state types
-export type FollowingFilter = 'following' | 'neither' | 'notFollowing';
-export type FollowedByFilter = 'followedBy' | 'neither' | 'notFollowedBy';
+export type FollowingFilter = "following" | "neither" | "notFollowing";
+export type FollowedByFilter = "followedBy" | "neither" | "notFollowedBy";
 
 // Computed comparison sets for each user
 export interface UserComparison {

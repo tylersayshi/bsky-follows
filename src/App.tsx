@@ -52,7 +52,8 @@ function App() {
         <h1
           className="text-3xl font-bold mb-2 bg-cyan-400 bg-clip-text text-transparent"
           style={{
-            fontFamily: '"Chalkboard SE", "Bradley Hand", cursive',
+            fontFamily:
+              "Chalkboard,ChalkboardSE-Regular,ChalkboardSE,ChalkDuster,Comic Sans MS,comic-sans,sans-serif",
           }}
         >
           Bluesky Follows

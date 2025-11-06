@@ -4,7 +4,7 @@ import { AccountsList } from "./AccountsList";
 import type { FollowerInfo } from "../types";
 import { useFilters } from "../hooks/useFilters";
 import { getFilteredAccounts } from "../utils/comparison";
-import { useSuspendedBlueskyFollows } from "../hooks/useBlueskyData";
+import { useBlueskyFollows } from "../hooks/useBlueskyData";
 
 interface UnifiedResultsViewProps {
 	allAccountsMap: Map<string, FollowerInfo>;
@@ -14,11 +14,12 @@ export function UnifiedResultsView({
 	allAccountsMap,
 }: UnifiedResultsViewProps) {
 	const [state] = useFilters();
-	const { data: userAData } = useSuspendedBlueskyFollows(state.a);
-	const { data: userBData } = useSuspendedBlueskyFollows(state.b);
+	const { data: userAData } = useBlueskyFollows(state.a);
+	const { data: userBData } = useBlueskyFollows(state.b);
 
 	// Defer the selected sets so UI updates immediately but filtering happens in background
 	const deferredSelectedSets = useDeferredValue(state.selectedSets);
+	if (!userAData || !userBData) return null;
 
 	// Map stable keys to actual Set objects
 	const keyToSetMap = new Map<string, Set<string>>([

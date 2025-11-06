@@ -63,14 +63,6 @@ export function useBlueskyFollows(handle: string | null) {
 	});
 }
 
-export function useSuspendedBlueskyFollows(handle: string | null) {
-	return useSuspenseQuery({
-		queryKey: ["bsky-follows", handle],
-		queryFn: getBlueskyFollows(handle),
-		retry: false,
-	});
-}
-
 export function useSearchActors(query: string) {
 	return useQuery({
 		queryKey: ["search-actors", query],

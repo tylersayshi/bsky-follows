@@ -149,13 +149,13 @@ export function FollowersVennDiagram({
 		});
 
 	return (
-		<div className="flex flex-col items-center">
-				<div className={"mb-2 self-end p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800" + (!hoveredData ? " bg-white/0! border-white/0" : "")}>
-					<p className="text-sm font-medium text-gray-900 dark:text-gray-100 min-h-5">
+		<div className="flex flex-col items-center relative min-w-0">
+				<div className={"mb-2 absolute top-0 right-0 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800" + (!hoveredData ? " bg-white/0! border-white/0" : "")}>
+					<p className="text-sm font-medium text-gray-900 dark:text-gray-100 min-h-5 whitespace-nowrap">
 						{hoveredData}
 					</p>
 				</div>
-			<div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm border border-gray-200 dark:border-gray-700">
+			<div className="bg-white mt-4 dark:bg-gray-800 rounded-lg p-4 shadow-sm border border-gray-200 dark:border-gray-700">
 				<VennDiagram
 					height={300}
 					width={400}

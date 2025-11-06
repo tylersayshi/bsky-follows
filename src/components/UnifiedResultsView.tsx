@@ -67,7 +67,7 @@ export function UnifiedResultsView({
 
 			{/* Accounts List */}
 			<div
-				className="flex-1"
+				className="w-full"
 				style={{
 					opacity: isFiltering ? 0.6 : 1,
 					transition: "opacity 0.2s",

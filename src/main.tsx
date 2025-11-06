@@ -8,26 +8,26 @@ import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client
 import { createIDBPersister } from "./utils/queryPersister";
 
 const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 1000 * 60 * 15, // 15 minutes - matches our revalidation window
-      gcTime: 1000 * 60 * 60 * 24, // 24 hours - keep data in cache longer
-      refetchOnWindowFocus: false,
-    },
-  },
+	defaultOptions: {
+		queries: {
+			staleTime: 1000 * 60 * 15, // 15 minutes - matches our revalidation window
+			gcTime: 1000 * 60 * 60 * 24, // 24 hours - keep data in cache longer
+			refetchOnWindowFocus: false,
+		},
+	},
 });
 
 const persister = createIDBPersister();
 
 createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <PersistQueryClientProvider
-      client={queryClient}
-      persistOptions={{ persister }}
-    >
-      <NuqsAdapter>
-        <App />
-      </NuqsAdapter>
-    </PersistQueryClientProvider>
-  </StrictMode>,
+	<StrictMode>
+		<PersistQueryClientProvider
+			client={queryClient}
+			persistOptions={{ persister }}
+		>
+			<NuqsAdapter>
+				<App />
+			</NuqsAdapter>
+		</PersistQueryClientProvider>
+	</StrictMode>,
 );

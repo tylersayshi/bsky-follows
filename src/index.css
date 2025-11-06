@@ -1,36 +1,36 @@
 @import "tailwindcss";
 
 :root {
-  color-scheme: light dark;
+	color-scheme: light dark;
 }
 
 @media (prefers-color-scheme: light) {
-  :root {
-    --bg-gradient-from: #ecfeff;
-    --bg-gradient-via: #ffffff;
-    --bg-gradient-to: #dbeafe;
-    --text-primary: #1f2937;
-    --text-secondary: #4b5563;
-    --border-color: #e5e7eb;
-    --card-bg: #ffffff;
-    --hover-bg: #f3f4f6;
-  }
+	:root {
+		--bg-gradient-from: #ecfeff;
+		--bg-gradient-via: #ffffff;
+		--bg-gradient-to: #dbeafe;
+		--text-primary: #1f2937;
+		--text-secondary: #4b5563;
+		--border-color: #e5e7eb;
+		--card-bg: #ffffff;
+		--hover-bg: #f3f4f6;
+	}
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --bg-gradient-from: #000000;
-    --bg-gradient-via: #000000;
-    --bg-gradient-to: #000000;
-    --text-primary: #f1f5f9;
-    --text-secondary: #94a3b8;
-    --border-color: #334155;
-    --card-bg: #1e293b;
-    --hover-bg: #334155;
-  }
+	:root {
+		--bg-gradient-from: #000000;
+		--bg-gradient-via: #000000;
+		--bg-gradient-to: #000000;
+		--text-primary: #f1f5f9;
+		--text-secondary: #94a3b8;
+		--border-color: #334155;
+		--card-bg: #1e293b;
+		--hover-bg: #334155;
+	}
 }
 
 .autocomplete-option:hover,
 .autocomplete-option[data-focus] {
-  background-color: var(--hover-bg);
+	background-color: var(--hover-bg);
 }

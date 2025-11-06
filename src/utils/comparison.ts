@@ -87,9 +87,10 @@ export function getFilteredAccounts(
 	for (let i = 1; i < selectedSets.length; i++) {
 		resultSet = resultSet.intersection(selectedSets[i]);
 	}
-
-	// Map handles to account objects using O(1) Map lookup
-	return Array.from(resultSet)
-		.map((handle) => allAccountsMap.get(handle))
-		.filter((acc): acc is FollowerInfo => acc !== undefined);
+	const resultList = [];
+	for (const handle of resultSet) {
+		const account = allAccountsMap.get(handle);
+		if (account) resultList.push(account);
+	}
+	return resultList;
 }

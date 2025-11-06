@@ -25,9 +25,11 @@ export function FollowersVennDiagram({
 	// Helper to calculate intersection size for any combination of sets
 	const getIntersectionSize = (sets: Set<string>[]) => {
 		if (sets.length === 0) return 0;
-		return [...sets[0]].filter((did) =>
-			sets.slice(1).every((set) => set.has(did)),
-		).length;
+		let result = sets[0];
+		for (let i = 1; i < sets.length; i++) {
+			result = result.intersection(sets[i]);
+		}
+		return result.size;
 	};
 
 	// Use stable keys that won't change when display names load
@@ -39,8 +41,8 @@ export function FollowersVennDiagram({
 	// Create unique labels for each set with display names for the Venn diagram
 	const user1FollowersLabel = `${user1?.displayName || state.a}'s followers`;
 	const user2FollowersLabel = `${user2?.displayName || state.b}'s followers`;
-	const user1FollowingLabel = `${user1?.displayName || state.a}'s following`;
-	const user2FollowingLabel = `${user2?.displayName || state.b}'s following`;
+	const user1FollowingLabel = `${user1?.displayName || state.a} follows`;
+	const user2FollowingLabel = `${user2?.displayName || state.b} follows`;
 
 	// Map labels to stable keys for URL storage
 	const labelToKeyMap = new Map([
@@ -48,6 +50,14 @@ export function FollowersVennDiagram({
 		[user2FollowersLabel, user2FollowersKey],
 		[user1FollowingLabel, user1FollowingKey],
 		[user2FollowingLabel, user2FollowingKey],
+	]);
+
+	// Map keys back to labels for display
+	const keyToLabelMap = new Map([
+		[user1FollowersKey, user1FollowersLabel],
+		[user2FollowersKey, user2FollowersLabel],
+		[user1FollowingKey, user1FollowingLabel],
+		[user2FollowingKey, user2FollowingLabel],
 	]);
 
 	// Build all possible intersections
@@ -148,11 +158,35 @@ export function FollowersVennDiagram({
 			return true;
 		});
 
+	// Derive selected data from state using allIntersections
+	const selectedData = (() => {
+		if (state.selectedSets.length === 0) return null;
+
+		// Convert keys back to labels
+		const selectedLabels = state.selectedSets
+			.map((key) => keyToLabelMap.get(key))
+			.filter((label): label is string => label !== undefined);
+
+		if (selectedLabels.length === 0) return null;
+
+		// Find matching intersection in allIntersections
+		const matchingIntersection = allIntersections.find((item) => {
+			if (item.key.length !== selectedLabels.length) return false;
+			return selectedLabels.every((label) => item.key.includes(label));
+		});
+
+		if (!matchingIntersection) return null;
+
+		return `${selectedLabels.join(" & ")} - ${matchingIntersection.data.toLocaleString()}`;
+	})();
+
+	const displayData = hoveredData || selectedData;
+
 	return (
-		<div className="flex flex-col items-center relative min-w-0">
-				<div className={"mb-2 absolute top-0 right-0 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800" + (!hoveredData ? " bg-white/0! border-white/0" : "")}>
+		<div className="flex flex-col items-center md:absolute top-0 right-0">
+				<div className={"mb-2 absolute top-0 right-0 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800" + (!displayData ? " bg-white/0! border-white/0" : "")}>
 					<p className="text-sm font-medium text-gray-900 dark:text-gray-100 min-h-5 whitespace-nowrap">
-						{hoveredData}
+						{displayData}
 					</p>
 				</div>
 			<div className="bg-white mt-4 dark:bg-gray-800 rounded-lg p-4 shadow-sm border border-gray-200 dark:border-gray-700">

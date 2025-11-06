@@ -38,8 +38,11 @@ export function UnifiedResultsView({
 
 		// Get all the sets that were selected using stable keys
 		const selectedSets = deferredSelectedSets
-			.map((key) => keyToSetMap.get(key))
-			.filter((set): set is Set<string> => set !== undefined);
+			.reduce<Set<string>[]>((acc, key) => {
+				const set = keyToSetMap.get(key)
+				if (set) acc.push(set);
+				return acc;
+			}, [])
 
 		return getFilteredAccounts(selectedSets, allAccountsMap);
 	})();
@@ -47,7 +50,7 @@ export function UnifiedResultsView({
 	const isFiltering = state.selectedSets !== deferredSelectedSets;
 
 	return (
-		<div className="space-y-6 flex-col flex md:flex-row-reverse">
+		<div className="space-y-6 flex-col flex md:flex-row-reverse relative">
 			{/* Similarity Score */}
 			{/* <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700">
         <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">Similarity Score</div>

@@ -1,9 +1,38 @@
-import type { BackendResponse, FollowerInfo } from '../types';
+import type { BackendResponse, FollowerInfo } from "../types";
 
 export interface ProcessedUserData extends BackendResponse {
   followsSet: Set<string>;
   followersSet: Set<string>;
   allAccounts: Map<string, FollowerInfo>;
+}
+
+/**
+ * Calculates similarity score between two users on a scale of 0-100
+ * Based on Jaccard similarity of their combined follows and followers
+ * 100 = identical follows and followers, 0 = no overlap
+ */
+export function calculateSimilarityScore(
+  userAData: ProcessedUserData | undefined,
+  userBData: ProcessedUserData | undefined
+): number {
+  if (!userAData || !userBData) {
+    return 0;
+  }
+
+  // Combine follows and followers for each user to get their "network"
+  const userANetwork = userAData.followsSet.union(userAData.followersSet);
+  const userBNetwork = userBData.followsSet.union(userBData.followersSet);
+
+  // Calculate Jaccard similarity: |A ∩ B| / |A ∪ B|
+  const intersection = userANetwork.intersection(userBNetwork);
+  const union = userANetwork.union(userBNetwork);
+
+  if (union.size === 0) {
+    return 0;
+  }
+
+  const similarity = (intersection.size / union.size) * 100;
+  return Math.round(similarity);
 }
 
 /**
@@ -14,7 +43,7 @@ export function getFilteredAccounts(
   userAData: ProcessedUserData | undefined,
   userBData: ProcessedUserData | undefined,
   aFilters: string[],
-  bFilters: string[],
+  bFilters: string[]
 ): FollowerInfo[] {
   if (!userAData || !userBData) {
     return [];
@@ -34,23 +63,24 @@ export function getFilteredAccounts(
   }
 
   // Build filter sets using Set operations
-  // For each user's filters, union the selected sets (OR logic within filter group)
+  // When both filters are selected, use intersection (AND logic)
+  // When only one filter is selected, use that set directly
   let aFilterSet = new Set<string>();
-  for (const filter of aFilters) {
-    if (filter === 'following') {
-      aFilterSet = aFilterSet.union(userAData.followsSet);
-    } else if (filter === 'followed-by') {
-      aFilterSet = aFilterSet.union(userAData.followersSet);
-    }
+  if (aFilters.includes("following") && aFilters.includes("followed-by")) {
+    aFilterSet = userAData.followsSet.intersection(userAData.followersSet);
+  } else if (aFilters.includes("following")) {
+    aFilterSet = userAData.followsSet;
+  } else if (aFilters.includes("followed-by")) {
+    aFilterSet = userAData.followersSet;
   }
 
   let bFilterSet = new Set<string>();
-  for (const filter of bFilters) {
-    if (filter === 'following') {
-      bFilterSet = bFilterSet.union(userBData.followsSet);
-    } else if (filter === 'followed-by') {
-      bFilterSet = bFilterSet.union(userBData.followersSet);
-    }
+  if (bFilters.includes("following") && bFilters.includes("followed-by")) {
+    bFilterSet = userBData.followsSet.intersection(userBData.followersSet);
+  } else if (bFilters.includes("following")) {
+    bFilterSet = userBData.followsSet;
+  } else if (bFilters.includes("followed-by")) {
+    bFilterSet = userBData.followersSet;
   }
 
   // Intersect the two filter sets (AND logic between filter groups)
@@ -63,6 +93,8 @@ export function getFilteredAccounts(
     resultSet = bFilterSet;
   }
 
+  // filter out any invalid handles
+  resultSet.delete("handle.invalid");
   // Map handles back to account info
-  return Array.from(resultSet).map(handle => allAccounts.get(handle)!);
+  return Array.from(resultSet).map((handle) => allAccounts.get(handle)!);
 }

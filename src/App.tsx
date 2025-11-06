@@ -2,8 +2,12 @@ import { useDeferredValue } from "react";
 import { parseAsArrayOf, parseAsString, useQueryStates } from "nuqs";
 import { UserAutocomplete } from "./components/UserAutocomplete";
 import { AccountsList } from "./components/AccountsList";
+import { SimilarityScore } from "./components/SimilarityScore";
 import { useBlueskyFollows } from "./hooks/useBlueskyData";
-import { getFilteredAccounts } from "./utils/comparison";
+import {
+  getFilteredAccounts,
+  calculateSimilarityScore,
+} from "./utils/comparison";
 
 const userAOptions = [
   { value: "following", label: "Following" },
@@ -39,6 +43,8 @@ function App() {
 
   const isFiltering =
     state.aFilters !== deferredAFilters || state.bFilters !== deferredBFilters;
+
+  const similarityScore = calculateSimilarityScore(userAData, userBData);
 
   return (
     <div
@@ -213,14 +219,23 @@ function App() {
               transition: "opacity 0.2s",
             }}
           >
-            <h2
-              className="text-lg font-semibold mb-4"
-              style={{ color: "var(--text-primary)" }}
-            >
-              Results{" "}
-              <span className="text-cyan-600">({filteredAccounts.length})</span>
-            </h2>
-            <AccountsList accounts={filteredAccounts} />
+            <div className="flex justify-between sm:gap-6 gap-2">
+              <div className="w-full">
+                <h2
+                  className="text-lg font-semibold mb-4"
+                  style={{ color: "var(--text-primary)" }}
+                >
+                  Results{" "}
+                  <span className="text-cyan-600">
+                    ({filteredAccounts.length})
+                  </span>
+                </h2>
+                <AccountsList accounts={filteredAccounts} />
+              </div>
+              {userAData && userBData && (
+                <SimilarityScore score={similarityScore} />
+              )}
+            </div>
           </div>
         )}
       </div>

@@ -1,4 +1,4 @@
-import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { AtpAgent } from "@atproto/api";
 import { HTTPError } from "ky";
 import ky from "ky";

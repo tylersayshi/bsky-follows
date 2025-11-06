@@ -9,6 +9,7 @@ import {
 	getFilteredAccounts,
 	calculateSimilarityScore,
 } from "./utils/comparison";
+import { ErrorMessage } from "./components/ErrorMessage";
 
 const userAOptions = [
 	{ value: "following", label: "Following" },
@@ -20,6 +21,7 @@ const userBOptions = [
 	{ value: "followed-by", label: "Followed By" },
 ];
 
+
 function App() {
 	const [state, setState] = useQueryStates({
 		a: parseAsString,
@@ -28,8 +30,8 @@ function App() {
 		bFilters: parseAsArrayOf(parseAsString).withDefault([]),
 	});
 
-	const { data: userAData, isLoading: isLoadingA } = useBlueskyFollows(state.a);
-	const { data: userBData, isLoading: isLoadingB } = useBlueskyFollows(state.b);
+	const { data: userAData, isLoading: isLoadingA, error: errorA } = useBlueskyFollows(state.a);
+	const { data: userBData, isLoading: isLoadingB, error: errorB } = useBlueskyFollows(state.b);
 
 	// Defer the filter values so UI updates immediately but filtering happens in background
 	const deferredAFilters = useDeferredValue(state.aFilters);
@@ -88,6 +90,7 @@ function App() {
 								</span>
 							</div>
 						)}
+						{errorA && <ErrorMessage error={errorA} />}
 						{userAData && (
 							<div className="mt-3 flex items-center gap-4 text-sm">
 								<div className="flex gap-4">
@@ -158,6 +161,7 @@ function App() {
 								</span>
 							</div>
 						)}
+						{errorB && <ErrorMessage error={errorB} />}
 						{userBData && (
 							<div className="mt-3 flex items-center gap-4 text-sm">
 								<div className="flex gap-4">

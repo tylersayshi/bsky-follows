@@ -1,7 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { AtpAgent } from "@atproto/api";
+import { HTTPError } from "ky";
 import ky from "ky";
-import type { BackendResponse, FollowerInfo } from "../types";
+import type { BackendResponse, BackendErrorResponse, FollowerInfo } from "../types";
 
 const agent = new AtpAgent({ service: "https://public.api.bsky.app" });
 
@@ -14,33 +15,42 @@ export function useBlueskyFollows(handle: string | null) {
 		queryFn: async () => {
 			if (!handle) throw new Error("No handle provided");
 
-			const result = await ky
-				.get(BACKEND_URL, {
-					searchParams: { actor: handle },
-				})
-				.json<BackendResponse>();
+			try {
+				const result = await ky
+					.get(BACKEND_URL, {
+						searchParams: { actor: handle },
+					})
+					.json<BackendResponse>();
 
-			// Pre-compute Sets and Maps for performance
-			const followsSet = new Set(result.follows.map((f) => f.handle));
-			const followersSet = new Set(result.followers.map((f) => f.handle));
+				// Pre-compute Sets and Maps for performance
+				const followsSet = new Set(result.follows.map((f) => f.handle));
+				const followersSet = new Set(result.followers.map((f) => f.handle));
 
-			// Combine all unique accounts
-			const allAccounts = new Map<string, FollowerInfo>();
-			for (const account of result.follows) {
-				allAccounts.set(account.handle, account);
+				// Combine all unique accounts
+				const allAccounts = new Map<string, FollowerInfo>();
+				for (const account of result.follows) {
+					allAccounts.set(account.handle, account);
+				}
+				for (const account of result.followers) {
+					allAccounts.set(account.handle, account);
+				}
+
+				return {
+					...result,
+					followsSet,
+					followersSet,
+					allAccounts,
+				};
+			} catch (error) {
+				if (error instanceof HTTPError) {
+					const errorData = await error.response.json<BackendErrorResponse>();
+					throw new Error(errorData.error || errorData.message || "Failed to fetch data");
+				}
+				throw error;
 			}
-			for (const account of result.followers) {
-				allAccounts.set(account.handle, account);
-			}
-
-			return {
-				...result,
-				followsSet,
-				followersSet,
-				allAccounts,
-			};
 		},
 		enabled: !!handle,
+		retry: false,
 	});
 }
 

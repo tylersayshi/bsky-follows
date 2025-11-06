@@ -14,6 +14,11 @@ export interface BackendResponse {
 	cacheHits?: number;
 }
 
+export interface BackendErrorResponse {
+	error: string;
+	message?: string;
+}
+
 // Filter state types
 export type FollowingFilter = "following" | "neither" | "notFollowing";
 export type FollowedByFilter = "followedBy" | "neither" | "notFollowedBy";

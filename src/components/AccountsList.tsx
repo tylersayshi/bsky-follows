@@ -8,7 +8,7 @@ export function AccountsList({ accounts }: AccountsListProps) {
 	if (accounts.length === 0) {
 		return (
 			<div
-				className="text-center py-12"
+				className="py-12"
 				style={{ color: "var(--text-secondary)" }}
 			>
 				No accounts match the selected filters

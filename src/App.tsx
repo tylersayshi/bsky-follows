@@ -49,15 +49,20 @@ function App() {
   return (
     <div className="min-h-screen py-6 px-4 bg-white dark:bg-black">
       <div className="container mx-auto max-w-5xl">
-        <h1
-          className="text-3xl font-bold mb-2 bg-cyan-400 bg-clip-text text-transparent"
-          style={{
-            fontFamily:
-              "Chalkboard,ChalkboardSE-Regular,ChalkboardSE,ChalkDuster,Comic Sans MS,comic-sans,sans-serif",
-          }}
-        >
-          Bluesky Follows
-        </h1>
+        <div className="flex items-center justify-between mb-2">
+          <h1
+            className="text-3xl font-bold bg-cyan-400 bg-clip-text text-transparent"
+            style={{
+              fontFamily:
+                "Chalkboard,ChalkboardSE-Regular,ChalkboardSE,ChalkDuster,Comic Sans MS,comic-sans,sans-serif",
+            }}
+          >
+            Bluesky Follows
+          </h1>
+          {userAData && userBData && (
+            <SimilarityScore score={similarityScore} />
+          )}
+        </div>
 
         {/* User Selection */}
         <div
@@ -213,24 +218,16 @@ function App() {
               transition: "opacity 0.2s",
             }}
           >
-            <div className="flex justify-between sm:gap-6 gap-2">
-              <div className="w-full">
-                <h2
-                  className="text-lg font-semibold mb-4"
-                  style={{ color: "var(--text-primary)" }}
-                >
-                  Results{" "}
-                  <span className="text-cyan-600">
-                    ({filteredAccounts.length})
-                  </span>
-                </h2>
-                <AccountsList accounts={filteredAccounts} />
-              </div>
-              {/* TODO this look bad on mobile */}
-              {userAData && userBData && (
-                <SimilarityScore score={similarityScore} />
-              )}
-            </div>
+            <h2
+              className="text-lg font-semibold mb-4"
+              style={{ color: "var(--text-primary)" }}
+            >
+              Results{" "}
+              <span className="text-cyan-600">
+                ({filteredAccounts.length})
+              </span>
+            </h2>
+            <AccountsList accounts={filteredAccounts} />
           </div>
         )}
       </div>

@@ -18,25 +18,21 @@ export function SimilarityScore({ score }: SimilarityScoreProps) {
   const message = getSimilarityMessage(score);
 
   return (
-    <div>
-      <div
-        className="px-3 py-2 rounded-lg border-2"
-        style={{
-          borderColor: "var(--border-color)",
-        }}
+    <div
+      className="px-3 py-1.5 rounded-lg border-2 flex items-center gap-3"
+      style={{
+        borderColor: "var(--border-color)",
+      }}
+    >
+      <span className="text-lg font-bold text-cyan-600 whitespace-nowrap">
+        {score} <span className="text-black dark:text-white">/ 100</span>
+      </span>
+      <span
+        className="text-xs font-medium"
+        style={{ color: "var(--text-secondary)" }}
       >
-        <div className="flex flex-col w-24 text-center justify-center items-center gap-2">
-          <span className="text-xl font-bold text-cyan-600">
-            {score} <span className="text-black dark:text-white">/ 100</span>
-          </span>
-          <span
-            className="text-xs font-medium block"
-            style={{ color: "var(--text-secondary)" }}
-          >
-            {message}
-          </span>
-        </div>
-      </div>
+        {message}
+      </span>
     </div>
   );
 }

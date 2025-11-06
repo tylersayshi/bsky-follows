@@ -25,7 +25,7 @@ export function UserAutocomplete({
   const deferredQuery = useDeferredValue(query);
   const { data: actors = [], isLoading } = useSearchActors(deferredQuery);
   const [selectedActor, setSelectedActor] =
-    useState<AppBskyActorDefs.ProfileViewBasic | null>(null);
+    useState<AppBskyActorDefs.ProfileViewBasic | null>(actors.find((a) => a.handle === value) ?? null);
 
   const isSearching = query !== deferredQuery;
 

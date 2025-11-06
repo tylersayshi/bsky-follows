@@ -24,7 +24,7 @@ function App() {
 	const allAccountsMap = getAllAccountsMap(userAData, userBData);
 
 	return (
-		<div className="min-h-screen py-6 px-4 bg-white dark:bg-black flex flex-col justify-between">
+		<div className="min-h-screen py-6 px-4 bg-white dark:bg-black flex flex-col justify-between overflow-x-hidden">
 			<div className="container mx-auto max-w-5xl">
 				<h1
 					className="text-3xl font-bold bg-cyan-400 bg-clip-text text-transparent mb-2"

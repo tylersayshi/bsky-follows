@@ -47,13 +47,7 @@ function App() {
   const similarityScore = calculateSimilarityScore(userAData, userBData);
 
   return (
-    <div
-      className="min-h-screen py-6 px-4"
-      style={{
-        background:
-          "linear-gradient(to bottom right, var(--bg-gradient-from), var(--bg-gradient-via), var(--bg-gradient-to))",
-      }}
-    >
+    <div className="min-h-screen py-6 px-4 bg-white dark:bg-black">
       <div className="container mx-auto max-w-5xl">
         <h1
           className="text-3xl font-bold mb-2 bg-cyan-400 bg-clip-text text-transparent"
@@ -125,7 +119,7 @@ function App() {
                             });
                           }
                         }}
-                        className={`px-2.5 py-1 text-xs rounded-full font-medium transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 ${
+                        className={`px-2.5 py-1 text-xs rounded-full font-medium transition-all cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-cyan-500 ${
                           isSelected
                             ? "bg-cyan-600 text-white hover:bg-cyan-700"
                             : "bg-gray-200 text-gray-700 hover:bg-gray-300"
@@ -195,7 +189,7 @@ function App() {
                             });
                           }
                         }}
-                        className={`px-2.5 py-1 text-xs rounded-full font-medium transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 ${
+                        className={`px-2.5 py-1 text-xs rounded-full font-medium transition-all cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-cyan-500 ${
                           isSelected
                             ? "bg-cyan-600 text-white hover:bg-cyan-700"
                             : "bg-gray-200 text-gray-700 hover:bg-gray-300"

@@ -48,7 +48,7 @@ export function UserAutocomplete({
       <Combobox value={selectedActor} onChange={handleChange}>
         <div className="relative">
           <ComboboxInput
-            className="w-full px-4 py-2 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+            className="w-full px-4 py-2 rounded-lg focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:border-transparent"
             style={{
               backgroundColor: 'var(--card-bg)',
               color: 'var(--text-primary)',

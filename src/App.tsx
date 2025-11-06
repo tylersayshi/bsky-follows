@@ -63,11 +63,13 @@ function App() {
             <SimilarityScore score={similarityScore} />
           )}
         </div>
+        <p className="mb-2 text-sm" style={{ color: "var(--text-secondary)" }}>
+          A tool for viewing the follower relationships of bluesky users.
+        </p>
 
         {/* User Selection */}
         <div
-          className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6 pb-6 border-b-2"
-          style={{ borderColor: "var(--border-color)" }}
+          className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6"
         >
           <div>
             <UserAutocomplete
@@ -219,7 +221,7 @@ function App() {
             }}
           >
             <h2
-              className="text-lg font-semibold mb-4"
+              className="text-lg font-semibold mb-2"
               style={{ color: "var(--text-primary)" }}
             >
               Results{" "}

@@ -186,7 +186,7 @@ export function FollowersVennDiagram({
 		<div className="flex flex-col items-center md:absolute top-0 right-0">
 			<div
 				className={
-					"mb-2 absolute top-0 right-0 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800" +
+					"mb-2 absolute top-0 right-0 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800 z-10" +
 					(!displayData ? " bg-white/0! border-white/0" : "")
 				}
 			>
@@ -194,7 +194,7 @@ export function FollowersVennDiagram({
 					{displayData}
 				</p>
 			</div>
-			<div className="bg-white mt-4 dark:bg-gray-800 rounded-lg p-4 shadow-sm border border-gray-200 dark:border-gray-700">
+			<div className="bg-white mt-4 dark:bg-gray-800 rounded-lg p-4 shadow-sm border border-gray-200 dark:border-gray-700 relative z-0">
 				<VennDiagram
 					height={300}
 					width={400}
@@ -244,6 +244,9 @@ export function FollowersVennDiagram({
 						/>
 					}
 				/>
+				<div className="absolute bottom-2 left-2 text-xs text-gray-400 dark:text-gray-500 italic">
+					click the chart
+				</div>
 			</div>
 		</div>
 	);

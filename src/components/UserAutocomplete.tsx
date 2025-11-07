@@ -70,7 +70,7 @@ export function UserAutocomplete({
 						tabIndex={tabIndex}
 					/>
 					<ComboboxOptions
-						className="absolute z-10 mt-1 w-full rounded-lg shadow-lg max-h-60 overflow-auto empty:invisible"
+						className="absolute z-20 mt-1 w-full rounded-lg shadow-lg max-h-60 overflow-auto empty:invisible"
 						style={{
 							backgroundColor: "var(--card-bg)",
 							borderWidth: "1px",

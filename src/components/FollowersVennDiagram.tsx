@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { VennDiagram, VennSeries, VennArc, VennLabel } from "reaviz";
 import { useBlueskyProfile } from "../hooks/useBlueskyData";
 import { useFilters } from "../hooks/useFilters";
@@ -22,6 +22,22 @@ export function FollowersVennDiagram({
 	const { data: user2 } = useBlueskyProfile(state.b);
 
 	const [hoveredData, setHoveredData] = useState<string | null>(null);
+	const containerRef = useRef<HTMLDivElement>(null);
+	const [dimensions, setDimensions] = useState({ width: 550, height: 400 });
+
+	useEffect(() => {
+		const updateDimensions = () => {
+			if (containerRef.current) {
+				const width = containerRef.current.offsetWidth - 32; // Account for padding
+				const height = Math.min(width * 0.73, 400); // Maintain aspect ratio, max 400
+				setDimensions({ width, height });
+			}
+		};
+
+		updateDimensions();
+		window.addEventListener("resize", updateDimensions);
+		return () => window.removeEventListener("resize", updateDimensions);
+	}, []);
 	// Helper to calculate intersection size for any combination of sets
 	const getIntersectionSize = (sets: Set<string>[]) => {
 		if (sets.length === 0) return 0;
@@ -186,7 +202,7 @@ export function FollowersVennDiagram({
 		<div className="flex flex-col items-center md:absolute top-0 right-0">
 			<div
 				className={
-					"mb-2 absolute top-0 right-0 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800 z-10" +
+					"mb-2 absolute top-0 right-0 p-3 bg-blue-50 dark:bg-blue-900 rounded-lg border border-blue-200 dark:border-blue-800 z-10" +
 					(!displayData ? " bg-white/0! border-white/0" : "")
 				}
 			>
@@ -194,26 +210,19 @@ export function FollowersVennDiagram({
 					{displayData}
 				</p>
 			</div>
-			<div className="bg-white mt-4 dark:bg-gray-800 rounded-lg p-4 shadow-sm border border-gray-200 dark:border-gray-700 relative z-0">
+			<div ref={containerRef} className="bg-white mt-4 dark:bg-gray-800 rounded-lg p-4 shadow-sm border border-gray-200 dark:border-gray-700 relative z-0 text-gray-900 dark:text-gray-100 overflow-visible w-full sm:w-[400px] md:w-[500px] lg:w-[600px] max-w-2xl">
 				<VennDiagram
-					height={300}
-					width={400}
+					height={dimensions.height}
+					width={dimensions.width}
 					data={vennData}
 					series={
 						<VennSeries
-							colorScheme="Pastel1"
+							colorScheme={["#ffee32","#168aad", "#ffd100", "#168aad"]}
 							arc={
 								<VennArc
 									tooltip={null}
-									strokeWidth={(() => {
-										const isSelected =
-											state.selectedSets.length > 0 &&
-											state.selectedSets.length === state.selectedSets.length &&
-											state.selectedSets.every((set) =>
-												state.selectedSets.includes(set),
-											);
-										return isSelected ? 5 : 3;
-									})()}
+                  gradient={null}
+									strokeWidth={3}
 									style={{ cursor: "pointer" }}
 									onMouseEnter={({ value }) => {
 										setHoveredData(
@@ -230,17 +239,7 @@ export function FollowersVennDiagram({
 									}}
 								/>
 							}
-							label={
-								<VennLabel
-									showAll={true}
-									format={(datum) => {
-										// Show key for single circles, value for intersections
-										if (datum.data.sets.length === 1) {
-											return datum.data.sets[0];
-										}
-									}}
-								/>
-							}
+							
 						/>
 					}
 				/>

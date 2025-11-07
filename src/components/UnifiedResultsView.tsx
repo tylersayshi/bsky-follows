@@ -23,10 +23,10 @@ export function UnifiedResultsView({
 
 	// Map stable keys to actual Set objects
 	const keyToSetMap = new Map<string, Set<string>>([
-		["user1-followers", userAData.followersSet],
-		["user2-followers", userBData.followersSet],
-		["user1-following", userAData.followsSet],
-		["user2-following", userBData.followsSet],
+		["a-followers", userAData.followersSet],
+		["b-followers", userBData.followersSet],
+		["a-following", userAData.followsSet],
+		["b-following", userBData.followsSet],
 	]);
 
 	// Filter accounts based on selected sets using optimized Set intersection

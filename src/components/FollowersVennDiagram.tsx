@@ -33,10 +33,10 @@ export function FollowersVennDiagram({
 	};
 
 	// Use stable keys that won't change when display names load
-	const user1FollowersKey = "user1-followers";
-	const user2FollowersKey = "user2-followers";
-	const user1FollowingKey = "user1-following";
-	const user2FollowingKey = "user2-following";
+	const user1FollowersKey = "a-followers";
+	const user2FollowersKey = "b-followers";
+	const user1FollowingKey = "a-following";
+	const user2FollowingKey = "b-following";
 
 	// Create unique labels for each set with display names for the Venn diagram
 	const user1FollowersLabel = `${user1?.displayName || state.a}'s followers`;

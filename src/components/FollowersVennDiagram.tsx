@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { VennDiagram, VennSeries, VennArc, VennLabel } from "reaviz";
+import { VennDiagram, VennSeries, VennArc } from "reaviz";
 import { useBlueskyProfile } from "../hooks/useBlueskyData";
 import { useFilters } from "../hooks/useFilters";
 
@@ -215,6 +215,7 @@ export function FollowersVennDiagram({
 					height={dimensions.height}
 					width={dimensions.width}
 					data={vennData}
+          type="euler"
 					series={
 						<VennSeries
 							colorScheme={["#ffee32","#168aad", "#ffd100", "#168aad"]}

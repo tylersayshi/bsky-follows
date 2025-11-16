@@ -19,4 +19,4 @@ The backend is a Val.town HTTP endpoint that:
 - Fetches follower/following data from Bluesky's ATP API
 - Caches large accounts (5,000+ followers) with gzip compression
 
-Learn more: [bsky-follows-backend](https://www.val.town/x/tylersayshi/bsky-follows-backend)
+The code: [bsky-follows-backend](https://www.val.town/x/tylersayshi/bsky-follows-backend)

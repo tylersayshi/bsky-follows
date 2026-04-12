@@ -1,11 +1,11 @@
-export function TylurLink() {
+export function TylerLink() {
 	return (
 		<a
-			href="https://tylur.dev"
+			href="https://tyler.fun"
 			target="_blank"
 			rel="noopener noreferrer"
 			className="focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:ring-offset-2 rounded transition-all scale-75 hover:scale-90 inline-block"
-			aria-label="Visit tylur.dev"
+			aria-label="Visit tyler.fun"
 			tabIndex={7}
 		>
 			<svg

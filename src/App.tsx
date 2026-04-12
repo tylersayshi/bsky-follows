@@ -1,5 +1,5 @@
 import { UserAutocomplete } from "./components/UserAutocomplete";
-import { TylurLink } from "./components/TylurLink";
+import { TylerLink } from "./components/TylerLink";
 import { useBlueskyFollows } from "./hooks/useBlueskyData";
 import { getAllAccountsMap } from "./utils/comparison";
 import { ErrorMessage } from "./components/ErrorMessage";
@@ -133,7 +133,7 @@ function App() {
 				className="mt-12 pt-6 border-t flex items-center justify-center gap-4"
 				style={{ borderColor: "var(--border-color, #e5e7eb)" }}
 			>
-				<TylurLink />
+				<TylerLink />
 				<a
 					href="https://github.com/tylersayshi/bsky-follows"
 					target="_blank"

@@ -2,7 +2,8 @@
 
 [bsky-follows.info](https://bsky-follows.info)
 
-<img width="1710" height="986" alt="bsky follows ui showing followers of @tyler.fun compared with @chrisshank.com" src="https://github.com/user-attachments/assets/74c7721e-81d1-4339-9fb1-f368145cb0a5" />
+<img width="1107" height="990" alt="bsky follows ui showing followers of @tyler.fun compared with @chrisshank.com" src="https://github.com/user-attachments/assets/360eec97-66c0-4696-91c7-ed2ed0c51ebc" />
+
 
 A tool for comparing and analyzing follower relationships between Bluesky users.
 

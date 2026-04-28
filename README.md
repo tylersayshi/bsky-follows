@@ -1,7 +1,5 @@
 # Bluesky Follows
 
-[bsky-follows.info](https://bsky-follows.info)
-
 <img width="1107" height="990" alt="bsky follows ui showing followers of @tyler.fun compared with @chrisshank.com" src="https://github.com/user-attachments/assets/360eec97-66c0-4696-91c7-ed2ed0c51ebc" />
 
 
